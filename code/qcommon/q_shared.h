@@ -27,10 +27,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // A user mod should never modify this file
 
 #ifdef STANDALONE
-  #define PRODUCT_NAME              "oa-ioq3"
+  #define DEFAULT_GAME              "omega"
+  #define PRODUCT_NAME              "omega"
   #define BASEGAME                  "baseoa"
-  #define CLIENT_WINDOW_TITLE       "OpenArena"
-  #define CLIENT_WINDOW_MIN_TITLE   "OA"
+  #define CLIENT_WINDOW_TITLE       "OmegA"
+  #define CLIENT_WINDOW_MIN_TITLE   "OMG"
   #define HOMEPATH_NAME_UNIX        ".openarena"
   #define HOMEPATH_NAME_WIN         "OpenArena"
   #define HOMEPATH_NAME_MACOSX		HOMEPATH_NAME_WIN
