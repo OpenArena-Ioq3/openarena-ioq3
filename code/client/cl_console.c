@@ -45,6 +45,7 @@ typedef struct {
 
 	float	displayFrac;	// aproaches finalFrac at scr_conspeed
 	float	finalFrac;		// 0.0 to 1.0 lines of console to display
+	float	userFrac;		// 0.0 to 1.0 - for user Configurations. Don't want to mess with finalFrac - marky
 
 	int		vislines;		// in scanlines
 
@@ -664,13 +665,25 @@ void Con_DrawSolidConsole( float frac ) {
 		y = 0;
 	}
 	else {
-		SCR_DrawPic( 0, 0, SCREEN_WIDTH, y, cls.consoleShader );
+		if ( cl_consoleType->integer ) {
+			color[0] = cl_consoleType->integer > 1 ? cl_consoleColor[0]->value : 1.0f ;
+			color[1] = cl_consoleType->integer > 1 ? cl_consoleColor[1]->value : 1.0f ;
+			color[2] = cl_consoleType->integer > 1 ? cl_consoleColor[2]->value : 1.0f ;
+			color[3] = cl_consoleColor[3]->value;
+			re.SetColor( color );
+		}
+		if ( cl_consoleType->integer == 2 ) {
+			SCR_DrawPic( 0, 0, SCREEN_WIDTH, y, cls.whiteShader );
+		} else {
+			SCR_DrawPic( 0, 0, SCREEN_WIDTH, y, cls.consoleShader );
+		}
 	}
 
 	color[0] = 1;
 	color[1] = 0;
 	color[2] = 0;
-	color[3] = 1;
+	if( !cl_consoleType->integer )
+		color[3] = 1;
 	SCR_FillRect( 0, y, SCREEN_WIDTH, 2, color );
 
 
@@ -783,7 +796,7 @@ Scroll it up or down
 void Con_RunConsole (void) {
 	// decide on the destination height of the console
 	if ( Key_GetCatcher( ) & KEYCATCH_CONSOLE )
-		con.finalFrac = 0.5;		// half screen
+		con.finalFrac = con.userFrac;
 	else
 		con.finalFrac = 0;				// none visible
 	
@@ -804,6 +817,22 @@ void Con_RunConsole (void) {
 
 }
 
+/*
+==================
+Con_SetFrac
+==================
+*/
+void Con_SetFrac(const float conFrac)
+{
+	// clamp the cvar value
+	if (conFrac < .1f) {	// don't let the console be hidden
+		con.userFrac = .1f;
+	} else if (conFrac > 1.0f) {
+		con.userFrac = 1.0f;
+	} else {
+		con.userFrac = conFrac;
+	}
+}
 
 void Con_PageUp( void ) {
 	con.display -= 2;
