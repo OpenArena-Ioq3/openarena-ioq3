@@ -3621,7 +3621,7 @@ void CL_Init( void ) {
 	// ~ and `, as keys and characters
 	cl_consoleKeys = Cvar_Get( "cl_consoleKeys", "~ ` 0x7e 0x60", CVAR_ARCHIVE);
 
-	cl_consoleType = Cvar_Get( "cl_consoleType", "0", CVAR_ARCHIVE );
+	cl_consoleType = Cvar_Get( "cl_consoleType", "2", CVAR_ARCHIVE );
 	cl_consoleColor[0] = Cvar_Get( "cl_consoleColorRed", "0", CVAR_ARCHIVE );
 	cl_consoleColor[1] = Cvar_Get( "cl_consoleColorGreen", "0", CVAR_ARCHIVE );
 	cl_consoleColor[2] = Cvar_Get( "cl_consoleColorBlue", "0", CVAR_ARCHIVE );
