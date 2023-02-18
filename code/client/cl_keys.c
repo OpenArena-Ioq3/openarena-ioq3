@@ -379,6 +379,8 @@ void Field_VariableSizeDraw( field_t *edit, int x, int y, int width, int size, q
 
 		color[0] = color[1] = color[2] = color[3] = 1.0;
 		SCR_DrawSmallStringExt( x, y, str, color, qfalse, noColorEscape );
+	} else if ( size == CONSOLECHAR_WIDTH ) {
+		SCR_DrawConsoleString( x, y, str, 1.0, noColorEscape );
 	} else {
 		// draw big string with drop shadow
 		SCR_DrawBigString( x, y, str, 1.0, noColorEscape );
@@ -400,6 +402,8 @@ void Field_VariableSizeDraw( field_t *edit, int x, int y, int width, int size, q
 
 		if ( size == SMALLCHAR_WIDTH ) {
 			SCR_DrawSmallChar( x + ( edit->cursor - prestep - i ) * size, y, cursorChar );
+		} else if ( size == CONSOLECHAR_WIDTH ) {
+			SCR_DrawConsoleChar( x + ( edit->cursor - prestep - i ) * size, y, CONSOLECHAR_WIDTH, cursorChar );
 		} else {
 			str[0] = cursorChar;
 			str[1] = 0;
@@ -417,6 +421,11 @@ void Field_Draw( field_t *edit, int x, int y, int width, qboolean showCursor, qb
 void Field_BigDraw( field_t *edit, int x, int y, int width, qboolean showCursor, qboolean noColorEscape ) 
 {
 	Field_VariableSizeDraw( edit, x, y, width, BIGCHAR_WIDTH, showCursor, noColorEscape );
+}
+
+void Field_ConsoleDraw( field_t *edit, int x, int y, int width, qboolean showCursor, qboolean noColorEscape ) 
+{
+	Field_VariableSizeDraw( edit, x, y, width, CONSOLECHAR_WIDTH, showCursor, noColorEscape );
 }
 
 /*

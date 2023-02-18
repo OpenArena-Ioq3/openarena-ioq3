@@ -154,6 +154,44 @@ static void SCR_DrawChar( int x, int y, float size, int ch ) {
 }
 
 /*
+** SCR_DrawConsoleChar
+** chars are drawn at 640*480 virtual screen size
+*/
+void SCR_DrawConsoleChar( int x, int y, float size, int ch ) {
+	int row, col;
+	float frow, fcol;
+	float	ax, ay, aw, ah;
+
+	ch &= 255;
+
+	if ( ch == ' ' ) {
+		return;
+	}
+
+	if ( y < -size ) {
+		return;
+	}
+
+	ax = x;
+	ay = y;
+	aw = size;
+	ah = size*2;
+	SCR_AdjustFrom640( &ax, &ay, &aw, &ah );
+
+	row = ch>>4;
+	col = ch&15;
+
+	frow = row*0.0625;
+	fcol = col*0.0625;
+	size = 0.0625;
+
+	re.DrawStretchPic( ax, ay, aw, ah,
+					   fcol, frow, 
+					   fcol + size, frow + size, 
+					   cls.charSetShader );
+}
+
+/*
 ** SCR_DrawSmallChar
 ** small chars are drawn at native screen resolution
 */
@@ -196,8 +234,7 @@ to a fixed color.
 Coordinates are at 640 by 480 virtual resolution
 ==================
 */
-void SCR_DrawStringExt( int x, int y, float size, const char *string, float *setColor, qboolean forceColor,
-		qboolean noColorEscape ) {
+void SCR_DrawStringExt( int x, int y, float size, const char *string, float *setColor, qboolean forceColor, qboolean noColorEscape, qboolean console ) {
 	vec4_t		color;
 	const char	*s;
 	int			xx;
@@ -235,7 +272,11 @@ void SCR_DrawStringExt( int x, int y, float size, const char *string, float *set
 				continue;
 			}
 		}
-		SCR_DrawChar( xx, y, size, *s );
+		if ( console ) {
+			SCR_DrawConsoleChar( xx, y, size, *s );
+		} else {
+			SCR_DrawChar( xx, y, size, *s );
+		}
 		xx += size;
 		s++;
 	}
@@ -248,13 +289,20 @@ void SCR_DrawBigString( int x, int y, const char *s, float alpha, qboolean noCol
 
 	color[0] = color[1] = color[2] = 1.0;
 	color[3] = alpha;
-	SCR_DrawStringExt( x, y, BIGCHAR_WIDTH, s, color, qfalse, noColorEscape );
+	SCR_DrawStringExt( x, y, BIGCHAR_WIDTH, s, color, qfalse, noColorEscape, qfalse );
 }
 
 void SCR_DrawBigStringColor( int x, int y, const char *s, vec4_t color, qboolean noColorEscape ) {
-	SCR_DrawStringExt( x, y, BIGCHAR_WIDTH, s, color, qtrue, noColorEscape );
+	SCR_DrawStringExt( x, y, BIGCHAR_WIDTH, s, color, qtrue, noColorEscape, qfalse );
 }
 
+void SCR_DrawConsoleString( int x, int y, const char *s, float alpha, qboolean noColorEscape ) {
+	float	color[4];
+
+	color[0] = color[1] = color[2] = 1.0;
+	color[3] = alpha;
+	SCR_DrawStringExt( x, y, CONSOLECHAR_WIDTH, s, color, qfalse, noColorEscape, qtrue );
+}
 
 /*
 ==================
@@ -343,7 +391,7 @@ void SCR_DrawDemoRecording( void ) {
 	pos = FS_FTell( clc.demofile );
 	sprintf( string, "REC", pos / 1024 );
 
-	SCR_DrawStringExt( 640 - 30, 480 - 10, 8, string, g_color_table[1], qtrue, qfalse );
+	SCR_DrawStringExt( 640 - 30, 480 - 10, 8, string, g_color_table[1], qtrue, qfalse, qfalse );
 }
 
 
@@ -382,7 +430,7 @@ void SCR_DrawVoipMeter( void ) {
 	buffer[i] = '\0';
 
 	sprintf( string, "VoIP: [%s]", buffer );
-	SCR_DrawStringExt( 320 - strlen( string ) * 4, 10, 8, string, g_color_table[7], qtrue, qfalse );
+	SCR_DrawStringExt( 320 - strlen( string ) * 4, 10, 8, string, g_color_table[7], qtrue, qfalse, qfalse );
 }
 #endif
 
