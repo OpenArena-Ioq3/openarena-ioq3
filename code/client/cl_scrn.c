@@ -239,20 +239,22 @@ void SCR_DrawStringExt( int x, int y, float size, const char *string, float *set
 	const char	*s;
 	int			xx;
 
-	// draw the drop shadow
-	color[0] = color[1] = color[2] = 0;
-	color[3] = setColor[3];
-	re.SetColor( color );
-	s = string;
-	xx = x;
-	while ( *s ) {
-		if ( !noColorEscape && Q_IsColorString( s ) ) {
-			s += 2;
-			continue;
+	if ( !console ) {
+		// draw the drop shadow
+		color[0] = color[1] = color[2] = 0;
+		color[3] = setColor[3];
+		re.SetColor( color );
+		s = string;
+		xx = x;
+		while ( *s ) {
+			if ( !noColorEscape && Q_IsColorString( s ) ) {
+				s += 2;
+				continue;
+			}
+			SCR_DrawChar( xx+2, y+2, size, *s );
+			xx += size;
+			s++;
 		}
-		SCR_DrawChar( xx+2, y+2, size, *s );
-		xx += size;
-		s++;
 	}
 
 
