@@ -234,7 +234,8 @@ to a fixed color.
 Coordinates are at 640 by 480 virtual resolution
 ==================
 */
-void SCR_DrawStringExt( int x, int y, float size, const char *string, float *setColor, qboolean forceColor, qboolean noColorEscape, qboolean console ) {
+void SCR_DrawStringExt( int x, int y, float size, const char *string, float *setColor, qboolean forceColor,
+		qboolean noColorEscape, qboolean console ) {
 	vec4_t		color;
 	const char	*s;
 	int			xx;
