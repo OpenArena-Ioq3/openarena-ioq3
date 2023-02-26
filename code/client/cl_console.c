@@ -23,11 +23,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include "client.h"
 
+// time that it takes for a notify line to fade away
+#define NOTIFY_FADE_TIME 250
+
+// time that console tab blinks when it receives a message
+#define NOTIFY_BLINK_TIME 250
+
 
 int g_console_field_width = 78;
 
 
-#define	NUM_CON_TIMES 4
+#define	NUM_CON_TIMES 8
 
 #define		CON_TEXTSIZE	32768
 typedef struct {
@@ -570,11 +576,11 @@ void Con_DrawNotify (void)
 	int		time;
 	int		skip;
 	int		currentColor;
+	int		notifytime = con_notifytime->value * 1000 + 2 * (int)NOTIFY_FADE_TIME;
 
 	currentColor = 7;
-	re.SetColor( g_color_table[currentColor] );
 
-	v = 0;
+	v = -CONSOLECHAR_HEIGHT;
 	for (i= con.current-NUM_CON_TIMES+1 ; i<=con.current ; i++)
 	{
 		if (i < 0)
@@ -583,8 +589,29 @@ void Con_DrawNotify (void)
 		if (time == 0)
 			continue;
 		time = cls.realtime - time;
-		if (time > con_notifytime->value*1000)
+		if (time > notifytime)
 			continue;
+
+		float fade = 2.0f;
+
+		if (notifytime - time < NOTIFY_FADE_TIME * 2.0f) {
+			fade = (notifytime - time) / (float)NOTIFY_FADE_TIME;
+		}
+
+		if (fade > 1.0f) {
+			color_table_alpha( fade - 1.0f );
+		} else {
+			color_table_alpha( 0.0f );
+		}
+
+		re.SetColor( g_color_table[currentColor] );
+
+		if (fade > 1.0f) {
+			v += CONSOLECHAR_HEIGHT;
+		} else {
+			v += fade * CONSOLECHAR_HEIGHT;
+		}
+
 		text = con.text + (i % con.totallines)*con.linewidth;
 
 		if (cl.snap.ps.pm_type != PM_INTERMISSION && Key_GetCatcher( ) & (KEYCATCH_UI | KEYCATCH_CGAME) ) {
@@ -601,9 +628,13 @@ void Con_DrawNotify (void)
 			}
 			SCR_DrawConsoleChar( cl_conXOffset->integer + con.xadjust + (x+1)*CONSOLECHAR_WIDTH, v, CONSOLECHAR_WIDTH, text[x] & 0xff );
 		}
-
-		v += CONSOLECHAR_HEIGHT;
 	}
+
+	if (v < 0) {
+		v = 0;
+	}
+
+	color_table_alpha( 1.0f );
 
 	re.SetColor( NULL );
 

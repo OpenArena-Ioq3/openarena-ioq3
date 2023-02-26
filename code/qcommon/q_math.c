@@ -147,6 +147,12 @@ vec3_t	bytedirs[NUMVERTEXNORMALS] =
 
 //==============================================================
 
+void	color_table_alpha( float a ) {
+	for (int i = 0 ; i < ARRAY_LEN( g_color_table ) ; ++i) {
+		g_color_table[i][3] = a;
+	}
+}
+
 int		Q_rand( int *seed ) {
 	*seed = (69069U * *seed + 1U);
 	return *seed;

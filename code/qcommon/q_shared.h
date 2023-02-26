@@ -440,6 +440,8 @@ qboolean Q_IsColorString(const char *p);  // ^[0-9a-zA-Z]
 
 extern vec4_t	g_color_table[8];
 
+void	color_table_alpha( float a );
+
 #define	MAKERGB( v, r, g, b ) v[0]=r;v[1]=g;v[2]=b
 #define	MAKERGBA( v, r, g, b, a ) v[0]=r;v[1]=g;v[2]=b;v[3]=a
 
