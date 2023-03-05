@@ -394,7 +394,7 @@ void SCR_DrawDemoRecording( void ) {
 	pos = FS_FTell( clc.demofile );
 	sprintf( string, "REC", pos / 1024 );
 
-	SCR_DrawStringExt( 640 - 30, 480 - 10, 8, string, g_color_table[1], qtrue, qfalse, qfalse );
+	SCR_DrawStringExt( 640 - 35, 480 - 19, 8, string, g_color_table[1], qtrue, qfalse, qfalse );
 }
 
 
