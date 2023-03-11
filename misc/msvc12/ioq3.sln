@@ -12,6 +12,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "quake3", "quake3.vcxproj", 
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ui", "ui.vcxproj", "{A8EAC38E-C7DA-42F8-811D-77FD092B9D19}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "opengl2", "opengl2.vcxproj", "{F7B397A4-8111-421B-A23B-B9A2CE509183}"
+EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "opengl1", "opengl1.vcxproj", "{CD289B03-887C-4602-BDCE-AB6785A7489E}"
 EndProject
 Global
