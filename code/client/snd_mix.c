@@ -134,9 +134,6 @@ void S_TransferStereo16 (unsigned long *pbuf, int endtime)
 
 		snd_p += snd_linear_count;
 		ls_paintedtime += (snd_linear_count>>1); // snd_linear_count / dma.channels
-
-		if( CL_VideoRecording( ) )
-			CL_WriteAVIAudioFrame( (byte *)snd_out, snd_linear_count << 1 ); // snd_linear_count * (dma.samplebits/8)
 	}
 }
 
@@ -243,6 +240,20 @@ void S_TransferPaintBuffer(int endtime)
 				out[out_idx] = (val>>8) + 128;
 				out_idx = (out_idx + 1) % dma.samples;
 			}
+		}
+	}
+
+	if ( CL_VideoRecording() ) {
+		count = (endtime - s_paintedtime) * dma.channels;
+		out_idx = s_paintedtime * dma.channels % dma.samples;
+		while ( count > 0 ) {
+			int n = count;
+			if ( n + out_idx > dma.samples ) {
+				n = dma.samples - out_idx;
+			}
+			CL_WriteAVIAudioFrame( buffer + out_idx * dma.samplebits / 8, n * dma.samplebits / 8 );
+			out_idx = (out_idx + n) % dma.samples;
+			count -= n;
 		}
 	}
 }
