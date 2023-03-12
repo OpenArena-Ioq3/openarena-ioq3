@@ -97,7 +97,7 @@ void R_LoadImage(const char *name, unsigned char **pic, int *width, int *height 
             }
         }
 
-        ri.Printf( PRINT_WARNING, "%s not present\n", localName );
+        //ri.Printf( PRINT_WARNING, "%s not present\n", localName );
 
     }
     else
@@ -114,14 +114,14 @@ void R_LoadImage(const char *name, unsigned char **pic, int *width, int *height 
 
             if( *pic != NULL )
             {
-                ri.Printf( PRINT_WARNING, "%s without a extension, using %s instead. \n",
-                        name, localName);
+                //ri.Printf( PRINT_WARNING, "%s without a extension, using %s instead. \n",
+                        //name, localName);
                 return;
             }
         }
     }
 
-    ri.Printf( PRINT_WARNING, "%s not present.\n", name);
+    //ri.Printf( PRINT_WARNING, "%s not present.\n", name);
 
     // try again without the extension
     

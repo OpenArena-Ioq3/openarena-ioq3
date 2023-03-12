@@ -540,7 +540,7 @@ void ScanAndLoadShaderFiles( void )
 		char filename[128] = {0};
 
 		snprintf( filename, sizeof( filename ), "scripts/%s", shaderFiles[i] );
-		ri.Printf( PRINT_ALL, "...loading '%s'\n", filename );
+		//ri.Printf( PRINT_ALL, "...loading '%s'\n", filename );
 		long summand = ri.FS_ReadFile( filename, &buffers[i] );
 		
 		if ( !buffers[i] )

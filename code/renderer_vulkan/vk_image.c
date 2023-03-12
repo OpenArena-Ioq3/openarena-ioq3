@@ -456,7 +456,7 @@ image_t* R_CreateImage( const char *name, unsigned char* pic, const uint32_t wid
     }
 
 
-    ri.Printf( PRINT_ALL, " Create Image: %s\n", name);
+    //ri.Printf( PRINT_ALL, " Create Image: %s\n", name);
     
     // Create image_t object.
 
@@ -700,10 +700,10 @@ image_t* R_FindImageFile(const char *name, VkBool32 mipmap, VkBool32 allowPicmip
 			if ( strcmp( name, "*white" ) )
 			{
 				if ( image->mipmap != mipmap ) {
-					ri.Printf( PRINT_WARNING, "WARNING: reused image %s with mixed mipmap parm\n", name );
+					//ri.Printf( PRINT_WARNING, "WARNING: reused image %s with mixed mipmap parm\n", name );
 				}
 				if ( image->allowPicmip != allowPicmip ) {
-					ri.Printf( PRINT_WARNING, "WARNING: reused image %s with mixed allowPicmip parm\n", name );
+					//ri.Printf( PRINT_WARNING, "WARNING: reused image %s with mixed allowPicmip parm\n", name );
 				}
 				if ( image->wrapClampMode != glWrapClampMode ) {
 					ri.Printf( PRINT_WARNING, "WARNING: reused image %s with mixed glWrapClampMode parm\n", name );
@@ -727,7 +727,7 @@ image_t* R_FindImageFile(const char *name, VkBool32 mipmap, VkBool32 allowPicmip
 
     if (pic == NULL)
     {
-        ri.Printf( PRINT_WARNING, "R_FindImageFile: Fail loading %s the from disk\n", name);
+        //ri.Printf( PRINT_WARNING, "R_FindImageFile: Fail loading %s the from disk\n", name);
         return NULL;
     }
 
