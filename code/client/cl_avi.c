@@ -366,7 +366,7 @@ qboolean CL_OpenAVIForWriting( const char *fileName )
   afd.eBuffer = Z_Malloc(PAD(afd.width * 3, AVI_LINE_PADDING) * afd.height);
 
   afd.a.rate = dma.speed;
-  afd.a.format = dma.isfloat ? WAVE_FORMAT_IEEE_FLOAT : WAV_FORMAT_PCM;
+  afd.a.format = dma.isfloat ? WAV_FORMAT_IEEE_FLOAT : WAV_FORMAT_PCM;
   afd.a.channels = dma.channels;
   /* !!! FIXME: if CL_WriteAVIAudioFrame() is ever called from somewhere other
      !!! FIXME:  than S_TransferStereo16(), we will need to handle/convert
