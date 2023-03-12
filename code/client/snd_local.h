@@ -111,8 +111,7 @@ typedef struct
 } channel_t;
 
 
-#define	WAV_FORMAT_PCM		0x0001
-#define	WAV_FORMAT_IEEE_FLOAT	0x0003
+#define	WAV_FORMAT_PCM		1
 
 
 typedef struct {
