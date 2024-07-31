@@ -50,8 +50,9 @@ Some of the major features currently implemented are:
 * HTTP/FTP download redirection (using cURL)
 * Multiuser support on Windows systems (user specific game data
     is stored in "%APPDATA%\Quake3")
-* PNG support
-* Many, many bug fixes
+  * PNG support
+  * Web support via Emscripten
+  * Many, many bug fixes
 
 The map editor and associated compiling tools are not included. We suggest you
 use a modern copy from <http://icculus.org/gtkradiant/>.
@@ -120,6 +121,20 @@ For macOS, building a Universal Binary 2 (macOS 10.9+, arm64, x86_64)
   4. Copy the resulting ioquake3.app in /build/release-darwin-universal2
      to your /Applications/ioquake3 folder.
 
+For Web, building with Emscripten
+  1. Follow the installation instructions for the Emscripten SDK including
+     setting up the environment with emsdk_env.
+  2. Run `emmake make debug` (or release).
+  3. Copy or symlink your baseq3 pk3 files into the `build/debug-emscripten-wasm32/baseq3`
+     directory so they can be loaded at run-time. Only game files listed in
+     `client-config.json` will be loaded.
+  4. Start a web server serving this directory. `python3 -m http.server`
+     is an easy default that you may already have installed.
+  5. Open `http://localhost:8000/build/debug-emscripten-wasm32/ioquake3.html`
+     in a web browser. Open the developer console to see errors and warnings.
+  6. Debugging the C code is possible using a Chrome extension. For details
+     see https://developer.chrome.com/blog/wasm-debugging-2020
+
 Installation, for *nix
 
   1. Set the COPYDIR variable in the shell to be where you installed Quake 3
@@ -137,7 +152,9 @@ x86_64.
 The following variables may be set, either on the command line or in
 Makefile.local:
 
-```txt
+```
+  DEPEND_MAKEFILE      - set to 0 to disable rebuilding all targets when
+                         the Makefile or Makefile.local is changed
   CFLAGS               - use this for custom CFLAGS
   V                    - set to show cc command line when building
   DEFAULT_BASEDIR      - extra path to search for baseq3 and such
@@ -151,6 +168,8 @@ Makefile.local:
   SERVERBIN            - rename 'ioq3ded' server binary
   CLIENTBIN            - rename 'ioquake3' client binary
   USE_RENDERER_DLOPEN  - build and use the renderer in a library
+  BUILD_RENDERER_OPENGL1 build the opengl1 client / renderer library
+  BUILD_RENDERER_OPENGL2 build the opengl2 client / renderer library
   USE_YACC             - use yacc to update code/tools/lcc/lburg/gram.c
   BASEGAME             - rename 'baseq3'
   BASEGAME_CFLAGS      - custom CFLAGS for basegame
@@ -178,13 +197,34 @@ Makefile.local:
   DEBUG_CFLAGS         - C compiler flags to use for building debug version
   COPYDIR              - the target installation directory
   TEMPDIR              - specify user defined directory for temp files
+  EMSCRIPTEN_PRELOAD_FILE - set to 1 to package 'baseq3' (BASEGAME) directory
+                            containing pk3s and loose files as a single
+                            .data file that is loaded instead of listing
+                            individual files in client-config.json
 ```
 
 The defaults for these variables differ depending on the target platform.
 
-## Console
 
-### New cvars
+# OpenGL ES support
+
+The opengl2 renderer (the default) supports OpenGL ES 2+. Though there
+are many missing features and the performance may not be sufficient for
+embedded System-on-a-Chip and mobile platforms.
+
+The opengl1 renderer does not have OpenGL ES support.
+
+The opengl2 renderer will try both OpenGL and OpenGL ES APIs to find one that
+works. The `r_preferOpenGLES` cvar controls which API to try first.
+Set it to -1 for auto (default), 0 for OpenGL, and 1 for OpenGL ES. It should be
+set using command line arguments:
+
+    ioquake3 +set cl_renderer opengl2 +set r_preferOpenGLES 1
+
+
+# Console
+
+## New cvars
 
 ```txt
   cl_autoRecordDemo                 - record a new demo on each map change
