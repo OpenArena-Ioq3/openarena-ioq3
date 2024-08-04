@@ -413,6 +413,7 @@ extern	vec4_t		colorLtGrey;
 extern	vec4_t		colorMdGrey;
 extern	vec4_t		colorDkGrey;
 
+#define NUMBER_OF_COLORS 9
 #define Q_COLOR_ESCAPE	'^'
 qboolean Q_IsColorString(const char *p);  // ^[0-9a-zA-Z]
 
@@ -424,7 +425,7 @@ qboolean Q_IsColorString(const char *p);  // ^[0-9a-zA-Z]
 #define COLOR_CYAN	'5'
 #define COLOR_MAGENTA	'6'
 #define COLOR_WHITE	'7'
-#define ColorIndexForNumber(c) ((c) & 0x07)
+#define ColorIndexForNumber(c) ((c) % NUMBER_OF_COLORS)
 #define ColorIndex(c) (ColorIndexForNumber((c) - '0'))
 
 #define S_COLOR_BLACK	"^0"
@@ -435,8 +436,9 @@ qboolean Q_IsColorString(const char *p);  // ^[0-9a-zA-Z]
 #define S_COLOR_CYAN	"^5"
 #define S_COLOR_MAGENTA	"^6"
 #define S_COLOR_WHITE	"^7"
+#define S_COLOR_MENU	"^8"
 
-extern vec4_t	g_color_table[8];
+extern vec4_t	g_color_table[NUMBER_OF_COLORS];
 
 #define	MAKERGB( v, r, g, b ) v[0]=r;v[1]=g;v[2]=b
 #define	MAKERGBA( v, r, g, b, a ) v[0]=r;v[1]=g;v[2]=b;v[3]=a
